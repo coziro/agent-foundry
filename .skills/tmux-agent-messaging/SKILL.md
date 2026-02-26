@@ -1,6 +1,6 @@
 ---
 name: tmux-agent-messaging
-description: tmuxのsend-keysを使って複数のClaude Codeエージェント間でメッセージを送受信するスキル。「右のペインのClaudeに話しかけたい」「複数のClaudeを連携させたい」「tmuxでエージェントにメッセージを送りたい」といった要求があった場合に使用する。
+description: tmuxの別ペインで動いているClaude Codeエージェントとメッセージを送受信するスキル。「別のペインのClaudeに聞いて」「隣のClaudeに話しかけて」「他のエージェントと連携して」「ペインにメッセージを送って」といった要求があった場合に使用する。また、[FROM:X:X.X] 形式のメッセージを受信して返信する必要がある場合にも使用する。
 metadata:
   version: "0.1"
 ---
