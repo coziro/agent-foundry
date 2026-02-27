@@ -52,4 +52,5 @@ FULL_MESSAGE="[FROM:${SELF}] ${MESSAGE}"
 # -l（リテラルモード）でtmuxの特殊キー解釈を無効にし、文字をそのまま送信する
 # Enterは -l では送れないため、別ステップで送信する
 tmux send-keys -l -t "$TARGET" "$FULL_MESSAGE" || { echo "Error: failed to send message to pane '$TARGET'" >&2; exit 1; }
+sleep 0.3
 tmux send-keys -t "$TARGET" Enter || { echo "Error: failed to send Enter to pane '$TARGET'" >&2; exit 1; }

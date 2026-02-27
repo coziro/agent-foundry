@@ -6,7 +6,7 @@
 """Task management CLI for Agent Foundry.
 
 Usage:
-  uv run .skills/task-manager/scripts/tasks.py list [--status STATUS] [--priority PRIORITY] [--tag TAG] [--sort KEY [KEY...]] [-v]
+  uv run .skills/task-manager/scripts/tasks.py list [--status STATUS] [--priority PRIORITY] [--tag TAG] [--sort KEY [KEY...]] [-v] [-w]
   uv run .skills/task-manager/scripts/tasks.py update ID [--status STATUS] [--priority PRIORITY] [--title TITLE] [--description DESC]
 
 Sort keys (applied left to right):
@@ -22,6 +22,8 @@ Note: To add a task, edit .tasks/tasks.yaml directly. See references/schema.md f
 """
 
 import argparse
+import io
+import re
 import sys
 from pathlib import Path
 
@@ -44,8 +46,12 @@ def load_data():
 def save_data(data):
     yaml = YAML()
     yaml.default_flow_style = False
+    buf = io.StringIO()
+    yaml.dump(data, buf)
+    # 可読性のため、各タスク ("- id: ...") の前に空行を挿入する
+    text = re.sub(r"(?<!\n)\n- id:", "\n\n- id:", buf.getvalue())
     with open(TASKS_FILE, "w") as f:
-        yaml.dump(data, f)
+        f.write(text)
 
 
 def cmd_list(args):
@@ -71,6 +77,11 @@ def cmd_list(args):
         return tuple(key)
 
     tasks.sort(key=sort_key)
+
+    # --write: ソート結果をファイルに書き戻す
+    if args.write:
+        data["tasks"] = tasks
+        save_data(data)
 
     if not tasks:
         print("No tasks found.")
@@ -121,6 +132,7 @@ def main():
     p_list.add_argument("--priority", choices=sorted(VALID_PRIORITIES))
     p_list.add_argument("--tag")
     p_list.add_argument("--sort", choices=["priority", "status", "created"], nargs="+", default=["status", "priority"])
+    p_list.add_argument("-w", "--write", action="store_true", help="Write sort order to file")
     p_list.add_argument("-v", "--verbose", action="store_true", help="Show description")
     p_list.set_defaults(func=cmd_list)
 

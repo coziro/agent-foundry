@@ -39,6 +39,9 @@ uv run .skills/task-manager/scripts/tasks.py list --tag infrastructure
 # ソート順を変更（複数キーを左から順に適用）
 uv run .skills/task-manager/scripts/tasks.py list --sort status priority
 
+# ソート結果をファイルにも書き戻す
+uv run .skills/task-manager/scripts/tasks.py list --sort status priority --write
+
 # 詳細（description）も表示
 uv run .skills/task-manager/scripts/tasks.py list -v
 ```
@@ -85,6 +88,10 @@ todo → in_progress → done
 会話の中でトラッキングすべき作業が発生したと判断したら、ユーザーへの確認なしにタスクを追加してよい。ただし追加後に「〇〇というタスクをリストに追加しました」と報告する。
 
 迷う場合はユーザーに確認する。
+
+## ソートについて
+
+ユーザーが「ソートして」と言った場合は、`list --write` を使ってファイルの並び順も変更する。
 
 ## 注意事項
 
